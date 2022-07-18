@@ -1,0 +1,251 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe Game</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+
+    <style>
+        .grid-player {
+          display: grid;
+          grid-template-columns: auto auto;
+          background-color: seashell;
+          border: 1px solid black;
+          padding: 10px;
+          width: 400px;
+          height: 100px;
+        }
+        .grid-pl-item {
+          border: 1px solid rgba(0, 0, 0, 0.8);
+          padding: 10px;
+          font-size: 30px;
+          text-align: center;
+          width: 180px;
+          height: auto;
+        }
+
+        .grid-container {
+          display: grid;
+          grid-template-columns: auto auto auto;
+          background-color: #2196F3;
+          padding: 10px;
+          width: 400px;
+          height: 400px;
+        }
+        .grid-item {
+          background-color: rgba(255, 255, 255, 0.8);
+          border: 1px solid rgba(0, 0, 0, 0.8);
+          padding: 20px;
+          font-size: 30px;
+          text-align: center;
+          width: 127px;
+          height: auto;
+        }
+
+        .grid-item:hover{
+            background-color: blueviolet;
+        }
+
+        h3{
+            height: 60px;
+            width: 400px;
+            display: none;
+            margin-top: 5px;
+            padding: 10px;
+            border: 1px solid red;
+            color: rgb(31, 187, 31);
+            background-color: seashell
+        }
+
+    </style>
+
+</head>
+<body>
+    <center><a href="" type="button" class="btn btn-warning mt-5">Re-Start Game</a></center>
+
+    <div class="grid-player container mt-2">
+        <div class="grid-pl-item" id="player-1" style="background-color: lightcoral;">Player 1</div>
+        <div class="grid-pl-item" id="player-2">Player 2</div>
+    </div>
+
+    <div class="grid-container container mt-2">
+        <button class="grid-item" id="btn-1" value="0">Click</button>
+        <button class="grid-item" id="btn-2" value="0">Click</button>
+        <button class="grid-item" id="btn-3" value="0">Click</button>
+
+        <button class="grid-item" id="btn-4" value="0">Click</button>
+        <button class="grid-item" id="btn-5" value="0">Click</button>
+        <button class="grid-item" id="btn-6" value="0">Click</button>
+
+        <button class="grid-item" id="btn-7" value="0">Click</button>
+        <button class="grid-item" id="btn-8" value="0">Click</button>
+        <button class="grid-item" id="btn-9" value="0">Click</button>
+    </div>
+    <center><h3></h3></center>
+</body>
+<script src="js/bootstrap.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var click_num = 0;
+
+        //button click event
+        $(document).on("click", "button.grid-item", function () {
+            click_num++
+
+            if (click_num%2 == 0) {
+                $("#player-1").css("background-color", "lightcoral");
+                $("#player-2").css("background-color", "seashell");
+                $(this).text("X");
+                $(this).val("2");
+                $(this).attr('disabled', 'disabled');
+
+                // call pattern match function
+                if (click_num >= 6) {
+                    match("2");
+                }
+            }else{
+                $("#player-1").css("background-color", "seashell");
+                $("#player-2").css("background-color", "lightcoral");
+                $(this).text("O");
+                $(this).val("1");
+                $(this).attr('disabled', 'disabled');
+
+                // call pattern match function
+                if (click_num >= 5) {
+                    match("1");
+                }
+            }
+        });
+
+        //check match pattern
+        function match(p_name) {
+            var match_row = false;
+            var match_collum = false;
+            var match_angle = false;
+
+            match_row =  same_row(p_name);
+
+            if (match_row == false) {
+                match_collum = same_collum(p_name);
+
+                if (match_collum == false) {
+                    match_angle = same_angle(p_name);
+
+                    if (match_angle == false) {
+                        //.......do nothing........
+                        // console.log("Matched Draw");
+                    } else {
+                        console.log("Player-"+p_name+" Win.");
+                        $("button").attr('disabled', 'disabled');
+                        $("h3").css("display", "block");
+                        $("h3").text("Congratulation! Player-"+ p_name +" Win" );
+                    }
+                    
+                } else {
+                    console.log("Player-"+p_name+" Win.");
+                    $("button").attr('disabled', 'disabled');
+                    $("h3").css("display", "block");
+                    $("h3").text("Congratulation! Player-"+ p_name +" Win" );
+                }
+            } else{
+                console.log("Player-"+p_name+" Win.");
+                $("button").attr('disabled', 'disabled');
+                $("h3").css("display", "block");
+                $("h3").text("Congratulation! Player-"+ p_name +" Win" );
+            }
+
+            // game terminate
+            if (click_num == 9) {
+                //console.log("Matched Draw");
+                $("h3").css("display", "block");
+                $("h3").text("Match Draw");
+            }
+        }
+
+
+        function same_row(val) {
+            if ($("#btn-1").val() == val && $("#btn-2").val() == val && $("#btn-3").val() == val) {
+
+                $("#btn-1").css("background-color", "lightcoral");
+                $("#btn-2").css("background-color", "lightcoral");
+                $("#btn-3").css("background-color", "lightcoral");
+                return true;
+
+            }else if ($("#btn-4").val() == val && $("#btn-5").val() == val && $("#btn-6").val() == val) {
+                
+                $("#btn-4").css("background-color", "lightcoral");
+                $("#btn-5").css("background-color", "lightcoral");
+                $("#btn-6").css("background-color", "lightcoral");
+                return true;
+            }
+            else if ($("#btn-7").val() == val && $("#btn-8").val() == val && $("#btn-9").val() == val) {
+                
+                $("#btn-7").css("background-color", "lightcoral");
+                $("#btn-8").css("background-color", "lightcoral");
+                $("#btn-9").css("background-color", "lightcoral");
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+
+        function same_collum(val) {
+            if ($("#btn-1").val() == val && $("#btn-4").val() == val && $("#btn-7").val() == val) {
+                
+                $("#btn-1").css("background-color", "lightcoral");
+                $("#btn-4").css("background-color", "lightcoral");
+                $("#btn-7").css("background-color", "lightcoral");
+                return true;
+
+            }else if ($("#btn-2").val() == val && $("#btn-5").val() == val && $("#btn-8").val() == val) {
+                
+                $("#btn-2").css("background-color", "lightcoral");
+                $("#btn-5").css("background-color", "lightcoral");
+                $("#btn-8").css("background-color", "lightcoral");
+                return true;
+            }
+            else if ($("#btn-3").val() == val && $("#btn-6").val() == val && $("#btn-9").val() == val) {
+                
+                $("#btn-3").css("background-color", "lightcoral");
+                $("#btn-6").css("background-color", "lightcoral");
+                $("#btn-9").css("background-color", "lightcoral");
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+
+        function same_angle(val) {
+            if ($("#btn-1").val() == val && $("#btn-5").val() == val && $("#btn-9").val() == val) {
+                
+                $("#btn-1").css("background-color", "lightcoral");
+                $("#btn-5").css("background-color", "lightcoral");
+                $("#btn-9").css("background-color", "lightcoral");
+                return true;
+
+            }else if ($("#btn-3").val() == val && $("#btn-5").val() == val && $("#btn-7").val() == val) {
+                
+                $("#btn-3").css("background-color", "lightcoral");
+                $("#btn-5").css("background-color", "lightcoral");
+                $("#btn-7").css("background-color", "lightcoral");
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+
+
+        //Reload Window
+        $(document).on("click", "a", function () {
+            location.reload();
+        })
+        
+    });
+</script>
+</html>
